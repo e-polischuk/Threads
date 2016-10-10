@@ -35,10 +35,6 @@ public class ProducerConsumer extends Thread {
 	} catch (InterruptedException e) {
 	    e.printStackTrace();
 	}
-	
-	
-	
-
     }
     
     public void produce(int id) {
@@ -70,29 +66,17 @@ public class ProducerConsumer extends Thread {
     }
     
     public Thread newProducer() {
-	Thread producer = new Thread(new Runnable() {
-	    public void run() {
-		int processes = amountProcess;
-		while(processes-- > 0) {
-		    produce(amountProcess - processes);
-		}
-	    }
+	return new Thread(() -> {
+	    int processes = amountProcess;
+	    while(processes-- > 0) produce(amountProcess - processes);
 	});
-	
-	return producer;
     }
     
     public Thread newConsumer() {
-	Thread consumer = new Thread(new Runnable() {
-	    int id = ++consumID;
-	    public void run() {
-		while(process < amountProcess - 1) {
-		    consume(id);
-		}  
-	    }
+	int id = ++consumID;
+	return new Thread(() -> {
+	    while(process < amountProcess - 1) consume(id);
 	});
-	
-	return consumer;
     }
     
     public void printFact(int number, int id) {
